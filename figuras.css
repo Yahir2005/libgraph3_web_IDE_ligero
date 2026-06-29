@@ -1,0 +1,50 @@
+body {
+    background-color: #1e1e1e;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    margin: 0;
+}
+
+#toolbar {
+    width: 200px;
+    background: #252526;
+    padding: 10px;
+    border-right: 1px solid #3c3c3c;
+}
+
+#canvas-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#canvas {
+    width: 640px;
+    height: 480px;
+    background: black;
+    border: 2px solid #555;
+    position: relative;
+}
+
+.componente {
+    padding: 5px 10px;
+    background: #007acc;
+    margin-bottom: 10px;
+    cursor: grab;
+    text-align: center;
+    user-select: none;
+}
+
+.componente-canvas {
+    padding: 5px 10px;
+    background: #007acc;
+    color: white;
+    text-align: center;
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    min-width: 80px;
+    box-sizing: border-box;
+}
