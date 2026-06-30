@@ -51,6 +51,29 @@ export class CodeGenerator {
                     lines.push(`    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
                     lines.push('');
                     break;
+                case 'circulo':
+                    // libgraph dibuja desde el centro. Calculamos el radio y el centro basado en la caja delimitadora.
+                    const radio = Math.round(width / 2);
+                    const cx = x1 + radio;
+                    const cy = y1 + Math.round(height / 2);
+                    lines.push(`    // Círculo`);
+                    lines.push(`    setcolor(${color});`);
+                    lines.push(`    circle(${cx}, ${cy}, ${radio});`);
+                    lines.push('');
+                    break;
+
+                case 'linea':
+                    lines.push(`    // Línea (Diagonal de la caja)`);
+                    lines.push(`    setcolor(${color});`);
+                    lines.push(`    line(${x1}, ${y1}, ${x2}, ${y2});`);
+                    lines.push('');
+                    break;
+
+                case 'pixel':
+                    lines.push(`    // Píxel`);
+                    lines.push(`    putpixel(${x1}, ${y1}, ${color});`);
+                    lines.push('');
+                    break;
             }
         });
 
