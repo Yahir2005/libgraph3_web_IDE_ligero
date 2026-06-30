@@ -3,64 +3,71 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>libgraph3 IDE - Inicio</title>
-    <link rel="stylesheet" href="./styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        /* Estilos específicos rápidos para centrar el menú de inicio */
         body {
+            background: #1e1e1e;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        .inicio-container {
+        .container {
             background: #252526;
             padding: 40px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
         }
+
+        button {
+            background: #007acc;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            margin: 10px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005a9e;
+        }
     </style>
 </head>
 
 <body>
-    <div class="inicio-container">
+    <div class="container">
         <h1 style="margin-top:0;">📐 libgraph3 IDE</h1>
         <p>Crear o cargar un proyecto en C</p>
-        <button class="boton-accion principal" id="nuevo" style="padding:12px 24px; font-size:1.1rem; margin:10px;">➕
-            Nuevo archivo .c</button>
-        <button class="boton-accion" id="crearProyecto" style="padding:12px 24px; font-size:1.1rem; margin:10px;">📁
-            Crear proyecto C</button>
-        <button class="boton-accion" id="cargar" style="padding:12px 24px; font-size:1.1rem; margin:10px;">📂 Cargar
-            archivo .c</button>
+        <button id="nuevo">➕ Nuevo archivo .c</button>
+        <button id="cargar">📂 Cargar archivo .c</button>
         <input type="file" id="fileInput" accept=".c" style="display:none;">
     </div>
+    <script>
+        document.getElementById('nuevo').addEventListener('click', () => {
+            const codigoBase = `#include <libgraph3.h>\n\nint main() {\n    int gd = DETECT, gm;\n    initgraph(&gd, &gm, "");\n    setbkcolor(WHITE);\n    cleardevice();\n\n    // === INICIO COMPONENTES ===\n    // No hay componentes\n    // === FIN COMPONENTES ===\n\n    getch();\n    closegraph();\n    return 0;\n}\n`;
+            localStorage.setItem('codigoC', codigoBase);
+            window.location.href = 'index.html';
+        });
 
-    <div id="modal-proyecto"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:999;">
-        <div class="modal-content">
-            <h2>📁 Nuevo proyecto C</h2>
-            <label>Nombre del proyecto:</label>
-            <input type="text" id="proj-name">
-
-            <label style="display:block; margin:12px 0;">
-                <input type="checkbox" id="use-db"> Usar base de datos
-            </label>
-
-            <div id="db-options" style="display:none;">
-                <label><input type="radio" name="db-type" value="mariadb"> MariaDB</label><br>
-                <label><input type="radio" name="db-type" value="sqlite"> SQLite</label>
-            </div>
-
-            <div style="margin-top:20px;">
-                <button id="btn-generar-proyecto" class="boton-accion principal">📦 Generar y descargar</button>
-                <button id="btn-cancelar-modal" class="boton-accion peligro">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="./src/welcome.js"></script>
+        document.getElementById('cargar').addEventListener('click', () => { document.getElementById('fileInput').click(); });
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                localStorage.setItem('codigoC', ev.target.result);
+                window.location.href = 'index.html';
+            };
+            reader.readAsText(file);
+        });
+    </script>
 </body>
 
 </html>

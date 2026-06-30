@@ -1,4 +1,3 @@
-/* --- Estilos generales --- */
 * {
     box-sizing: border-box;
 }
@@ -8,36 +7,89 @@ body {
     color: #d4d4d4;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* --- Barra lateral --- */
-#toolbar {
-    width: 180px;
+#app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+#panel-izquierdo {
+    width: 250px;
     background: #252526;
-    padding: 15px 10px;
     border-right: 1px solid #3c3c3c;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     flex-shrink: 0;
 }
 
-#toolbar h3 {
-    margin: 0 0 10px 0;
-    color: #ccc;
-    font-weight: 300;
+.panel-header {
+    padding: 12px 15px;
+    background: #2d2d2d;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cccccc;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.lista-archivos {
+    padding: 10px 0;
+}
+
+.archivo-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.archivo-item:hover {
+    background: #2a2d2e;
+}
+
+.archivo-item.activo {
+    background: #37373d;
+    border-left: 3px solid #007acc;
+    color: white;
+}
+
+#panel-derecho {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #1e1e1e;
+}
+
+.toolbar {
+    height: 60px;
+    background: #2d2d30;
+    border-bottom: 1px solid #3c3c3c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    flex-shrink: 0;
+}
+
+.grupo-herramientas,
+.grupo-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .herramienta {
     background: #007acc;
-    padding: 8px 12px;
+    padding: 6px 10px;
     text-align: center;
     border-radius: 4px;
     cursor: grab;
     user-select: none;
+    font-size: 0.85rem;
     transition: background 0.2s;
 }
 
@@ -45,16 +97,14 @@ body {
     background: #005a9e;
 }
 
-/* --- Botones --- */
 .boton-accion {
     background: #3c3c3c;
     border: none;
     color: white;
-    padding: 8px;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 5px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: background 0.2s;
 }
 
@@ -78,12 +128,10 @@ body {
     background: #c42b2b;
 }
 
-/* --- Contenedor central --- */
-#main {
-    display: flex;
+#workspace {
     flex: 1;
-    flex-direction: row;
-    height: 100vh;
+    position: relative;
+    display: flex;
 }
 
 #canvas-wrapper {
@@ -92,7 +140,10 @@ body {
     justify-content: center;
     align-items: center;
     background: #1a1a1a;
-    padding: 10px;
+    background-image: radial-gradient(#333 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 20px;
+    overflow: auto;
 }
 
 #canvas {
@@ -103,9 +154,71 @@ body {
     position: relative;
     cursor: default;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Componentes dentro del lienzo --- */
+#codigo-wrapper {
+    flex: 1;
+    display: flex;
+}
+
+#codigoTextarea {
+    flex: 1;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: none;
+    padding: 20px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    tab-size: 4;
+}
+
+#menu-archivo {
+    position: fixed;
+    background: #111111;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+}
+
+.menu-titulo {
+    background: #000;
+    color: #9d4edd;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.opciones-container {
+    border: 3px solid #9d4edd;
+    background: #111;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.opcion-menu {
+    background: #000;
+    color: #ff8c00;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 2px;
+}
+
+.opcion-menu:hover {
+    background: #222;
+    color: #ffae00;
+}
+
 .componente-canvas {
     position: absolute;
     padding: 6px 12px;
@@ -117,9 +230,7 @@ body {
     min-width: 60px;
     text-align: center;
     font-size: 14px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border: 2px solid transparent;
-    transition: border 0.1s;
     box-sizing: border-box;
 }
 
@@ -133,13 +244,11 @@ body {
     color: #e74c3c;
     min-width: 80px;
     min-height: 40px;
-    box-shadow: none;
 }
 
 .componente-canvas.texto {
     background: transparent;
     color: #2c3e50;
-    box-shadow: none;
     min-width: auto;
     padding: 2px 6px;
     font-size: 16px;
@@ -152,87 +261,6 @@ body {
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Panel de código --- */
-#codigo-panel {
-    width: 45%;
-    background: #1e1e1e;
-    padding: 10px;
-    border-left: 1px solid #3c3c3c;
-    display: flex;
-    flex-direction: column;
-}
-
-#codigo-panel textarea {
-    flex: 1;
-    background: #1e1e1e;
-    color: #d4d4d4;
-    border: 1px solid #3c3c3c;
-    border-radius: 4px;
-    padding: 8px;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 13px;
-    resize: none;
-    outline: none;
-    tab-size: 4;
-}
-
-#codigo-panel .acciones {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-    flex-wrap: wrap;
-}
-
-/* --- Modal Base --- */
-#modal-proyecto {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-}
-
-.modal-content {
-    background: #252526;
-    padding: 30px;
-    border-radius: 8px;
-    width: 400px;
-    color: white;
-}
-
-.modal-content input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0;
-    background: #1e1e1e;
-    color: white;
-    border: 1px solid #3c3c3c;
-    border-radius: 4px;
-}
-
-/* --- Responsive --- */
-@media (max-width: 1000px) {
-    #main {
-        flex-direction: column;
-    }
-
-    #codigo-panel {
-        width: 100%;
-        height: 40%;
-        border-left: none;
-        border-top: 1px solid #3c3c3c;
-    }
-
-    #canvas-wrapper {
-        height: 60%;
-    }
-}
-
-/* Añadir al final de styles.css */
 .resizer-handle {
     width: 10px;
     height: 10px;
@@ -244,109 +272,4 @@ body {
     border-radius: 2px 0 2px 0;
     z-index: 20;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-}
-
-.componente-canvas {
-    /* Nos aseguramos de mantener el control posicional interno de las manijas */
-    position: absolute;
-    box-sizing: border-box;
-}
-
-/* --- PANTALLA DE INICIO --- */
-#start-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #1e1e1e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-.start-container {
-    background: #252526;
-    padding: 40px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    border: 1px solid #3c3c3c;
-}
-
-.start-container h1 {
-    margin-top: 0;
-    color: #007acc;
-}
-
-.start-container button {
-    display: block;
-    width: 100%;
-    margin: 15px 0;
-    padding: 12px;
-    font-size: 1rem;
-}
-
-/* --- CONTENEDORES DEL IDE --- */
-#ide-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-}
-
-#sidebar {
-    width: 220px;
-    background: #252526;
-    border-right: 1px solid #3c3c3c;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    overflow-y: auto;
-}
-
-#file-explorer,
-#toolbar {
-    padding: 15px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#file-explorer h3,
-#toolbar h3 {
-    margin: 0 0 10px 0;
-    color: #ccc;
-    font-weight: 300;
-}
-
-/* --- ÁRBOL DE ARCHIVOS --- */
-.archivo-item {
-    padding: 6px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    color: #d4d4d4;
-    font-family: monospace;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.archivo-item:hover {
-    background: #37373d;
-}
-
-.archivo-item.activo {
-    background: #094771;
-    color: white;
-}
-
-.archivo-item.carpeta {
-    color: #d7ba7d;
-    pointer-events: none;
-    margin-top: 8px;
-    font-weight: bold;
-    border-bottom: 1px solid #3c3c3c;
-    padding-bottom: 2px;
 }

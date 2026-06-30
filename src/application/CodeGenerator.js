@@ -1,8 +1,8 @@
 export class CodeGenerator {
     static generate(components) {
-        if (components.length === 0) return '    // No hay componentes en el bloque actual\n';
-
+        if (components.length === 0) return '    // No hay componentes\n';
         let lines = [];
+        let interactivo = false;
 
         components.forEach(comp => {
             const { x, y, width, height, text, type, command, varName, color, fontSize } = comp;
@@ -11,72 +11,44 @@ export class CodeGenerator {
 
             switch (type) {
                 case 'boton':
-                    lines.push(`    // Botón Nativo Interactivo: "${text}"`);
+                    interactivo = true;
                     lines.push(`    if (button(${x1}, ${y1}, ${x2}, ${y2}, "${text}")) {`);
                     if (command) {
-                        // Indentar cada línea del script provisto por el usuario
-                        command.split('\n').forEach(lineaCmd => {
-                            lines.push(`        ${lineaCmd}`);
-                        });
+                        command.split('\n').forEach(cmd => lines.push(`        ${cmd}`));
                     } else {
-                        lines.push(`        setcolor(YELLOW);`);
-                        lines.push(`        outtextxy(${x1}, ${y2 + 10}, "¡Accion Ejecutada!");`);
+                        lines.push(`        setcolor(YELLOW);\n        outtextxy(${x1}, ${y2 + 10}, "Click!");`);
                     }
                     lines.push(`    }`);
-                    lines.push('');
                     break;
-
                 case 'campo':
-                    lines.push(`    // Bloque de Entrada de Texto (Estilo NetBeans)`);
+                    interactivo = true;
                     lines.push(`    setfillstyle(SOLID_FILL, ${color === 'WHITE' ? 'WHITE' : color});`);
                     lines.push(`    bar(${x1}, ${y1}, ${x2}, ${y2});`);
-                    lines.push(`    setcolor(BLACK);`);
-                    lines.push(`    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
+                    lines.push(`    setcolor(BLACK);\n    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
                     lines.push(`    outtextxy(${x1 + 6}, ${y1 + 12}, "${text}");`);
-                    lines.push(`    // TODO: Procesar buffer en la variable asignada: ${varName || 'input_buffer'}`);
-                    lines.push('');
                     break;
-
                 case 'texto':
-                    lines.push(`    // Renderizado de Texto`);
-                    lines.push(`    setcolor(${color});`);
-                    lines.push(`    settextstyle(DEFAULT_FONT, HORIZ_DIR, ${fontSize});`);
+                    lines.push(`    setcolor(${color});\n    settextstyle(DEFAULT_FONT, HORIZ_DIR, ${fontSize});`);
                     lines.push(`    outtextxy(${x1}, ${y1}, "${text}");`);
-                    lines.push('');
                     break;
-
                 case 'rectangulo':
-                    lines.push(`    // Figura Geométrica`);
-                    lines.push(`    setcolor(${color});`);
-                    lines.push(`    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
-                    lines.push('');
+                    lines.push(`    setcolor(${color});\n    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
                     break;
                 case 'circulo':
-                    // libgraph dibuja desde el centro. Calculamos el radio y el centro basado en la caja delimitadora.
-                    const radio = Math.round(width / 2);
-                    const cx = x1 + radio;
-                    const cy = y1 + Math.round(height / 2);
-                    lines.push(`    // Círculo`);
-                    lines.push(`    setcolor(${color});`);
-                    lines.push(`    circle(${cx}, ${cy}, ${radio});`);
-                    lines.push('');
+                    const r = Math.round(width / 2);
+                    lines.push(`    setcolor(${color});\n    circle(${x1 + r}, ${y1 + Math.round(height / 2)}, ${r});`);
                     break;
-
                 case 'linea':
-                    lines.push(`    // Línea (Diagonal de la caja)`);
-                    lines.push(`    setcolor(${color});`);
-                    lines.push(`    line(${x1}, ${y1}, ${x2}, ${y2});`);
-                    lines.push('');
+                    lines.push(`    setcolor(${color});\n    line(${x1}, ${y1}, ${x2}, ${y2});`);
                     break;
-
                 case 'pixel':
-                    lines.push(`    // Píxel`);
                     lines.push(`    putpixel(${x1}, ${y1}, ${color});`);
-                    lines.push('');
                     break;
             }
+            lines.push('');
         });
 
+        if (interactivo) lines.push('    // NOTA: Para interactividad, añade un bucle while (!kbhit()) manual.');
         return lines.join('\n');
     }
 }

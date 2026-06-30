@@ -4,38 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>libgraph3 IDE Ligero - Editor</title>
+    <title>libgraph3 IDE - Editor</title>
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 
-<body style="display:flex; justify-content:flex-start; align-items:stretch;">
-    <div id="toolbar">
-        <h3>🧰 Herramientas</h3>
-        <div class="herramienta" data-tipo="boton">🔘 Botón</div>
-        <div class="herramienta" data-tipo="texto">📝 Texto</div>
-        <div class="herramienta" data-tipo="rectangulo">▭ Rectángulo</div>
-        <div class="herramienta" data-tipo="campo">🔤 Campo</div>
-        <div class="herramienta" data-tipo="linea">📏 Línea</div>
-        <div class="herramienta" data-tipo="circulo">⭕ Círculo</div>
-        <div class="herramienta" data-tipo="pixel">◽ Píxel</div>
-        <hr style="border-color:#3c3c3c; width:100%;">
-        <button class="boton-accion principal" id="insertarComp">⬇ Insertar componentes</button>
-        <button class="boton-accion" id="descargar">💾 Descargar .c</button>
-        <button class="boton-accion peligro" id="limpiarCanvas">🗑 Limpiar lienzo</button>
-        <button class="boton-accion" onclick="window.location.href='inicio.html'"
-            style="margin-top:20px; background:#555;">⬅ Volver al inicio</button>
+<body>
+    <div id="app-container">
+        <div id="panel-izquierdo">
+            <div class="panel-header">📁 Explorador</div>
+            <div class="lista-archivos">
+                <div class="archivo-item activo" id="file-inicio">📄 main.c</div>
+            </div>
+        </div>
+
+        <div id="panel-derecho">
+            <div id="toolbar-ui" class="toolbar">
+                <div class="grupo-herramientas">
+                    <span style="color:#888; font-size:0.9rem; margin-right:10px;">🧰 Modo UI:</span>
+                    <div class="herramienta" data-tipo="boton">🔘 Botón</div>
+                    <div class="herramienta" data-tipo="texto">📝 Texto</div>
+                    <div class="herramienta" data-tipo="rectangulo">▭ Rectángulo</div>
+                    <div class="herramienta" data-tipo="campo">🔤 Campo</div>
+                    <div class="herramienta" data-tipo="linea">📏 Línea</div>
+                    <div class="herramienta" data-tipo="circulo">⭕ Círculo</div>
+                    <div class="herramienta" data-tipo="pixel">◽ Píxel</div>
+                </div>
+                <div class="grupo-acciones">
+                    <button class="boton-accion principal" id="insertarComp">⬇ Insertar a C</button>
+                    <button class="boton-accion peligro" id="limpiarCanvas">🗑 Limpiar</button>
+                </div>
+            </div>
+
+            <div id="toolbar-codigo" class="toolbar" style="display:none;">
+                <div class="grupo-herramientas">
+                    <span style="color:#888; font-size:0.9rem; margin-right:10px;">💻 Modo Código</span>
+                </div>
+                <div class="grupo-acciones">
+                    <button class="boton-accion principal" id="descargar">💾 Descargar .c</button>
+                    <button class="boton-accion" onclick="window.location.href='inicio.html'" style="background:#555;">⬅
+                        Inicio</button>
+                </div>
+            </div>
+
+            <div id="workspace">
+                <div id="canvas-wrapper">
+                    <div id="canvas"></div>
+                </div>
+                <div id="codigo-wrapper" style="display:none;">
+                    <textarea id="codigoTextarea" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="main">
-        <div id="canvas-wrapper">
-            <div id="canvas"></div>
-        </div>
-        <div id="codigo-panel">
-            <textarea id="codigoTextarea" spellcheck="false"></textarea>
-            <div class="acciones">
-                <span style="font-size:0.8rem; color:#888;">Edita el código libremente. El marcador <b>// === INICIO
-                        COMPONENTES ===</b> será reemplazado.</span>
-            </div>
+    <div id="menu-archivo" style="display:none;">
+        <div class="menu-titulo">opciones</div>
+        <div class="opciones-container">
+            <div class="opcion-menu" id="opt-editar-ui">editarUI</div>
+            <div class="opcion-menu" id="opt-ver-codigo">ver código</div>
         </div>
     </div>
 
@@ -43,11 +70,9 @@
         style="display:none; position:fixed; background:#252526; border:1px solid #3c3c3c; border-radius:6px; padding:12px; z-index:1000; box-shadow:0 6px 16px rgba(0,0,0,0.6); width:250px; color:#d4d4d4;">
         <h4 style="margin:0 0 10px 0; border-bottom:1px solid #3c3c3c; padding-bottom:6px; color:#007acc;">🛠
             Propiedades</h4>
-
         <label id="label-texto" style="font-size:0.75rem; display:block; margin-bottom:4px;">Texto / Etiqueta:</label>
         <input type="text" id="prop-texto"
             style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
-
         <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Color (libgraph):</label>
         <select id="prop-color"
             style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
@@ -59,25 +84,21 @@
             <option value="BLACK">BLACK</option>
             <option value="BLUE">BLUE</option>
         </select>
-
-        <div id="prop-size-container" style="display:none;">
-            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Tamaño Fuente C:</label>
-            <input type="number" id="prop-size" min="1" max="5" value="1"
+        <div id="prop-size-container" style="display:none;"><label
+                style="font-size:0.75rem; display:block; margin-bottom:4px;">Tamaño Fuente C:</label><input
+                type="number" id="prop-size" min="1" max="5" value="1"
                 style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
         </div>
-
-        <div id="prop-variable-container" style="display:none;">
-            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Nombre de Variable C:</label>
-            <input type="text" id="prop-variable" placeholder="txt_buffer"
+        <div id="prop-variable-container" style="display:none;"><label
+                style="font-size:0.75rem; display:block; margin-bottom:4px;">Nombre Variable C:</label><input
+                type="text" id="prop-variable" placeholder="txt_buffer"
                 style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
         </div>
-
-        <div id="prop-codigo-container" style="display:none;">
-            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Código de Acción (C):</label>
-            <textarea id="prop-codigo"
+        <div id="prop-codigo-container" style="display:none;"><label
+                style="font-size:0.75rem; display:block; margin-bottom:4px;">Código de Acción (C):</label><textarea
+                id="prop-codigo"
                 style="width:100%; height:75px; background:#1e1e1e; border:1px solid #3c3c3c; color:#bae1ff; padding:5px; border-radius:4px; font-family:monospace; font-size:0.75rem; resize:none; margin-bottom:10px;"></textarea>
         </div>
-
         <button id="prop-guardar"
             style="width:100%; background:#007acc; border:none; color:white; padding:7px; border-radius:4px; cursor:pointer;">Aplicar
             Cambios</button>
