@@ -15,22 +15,33 @@ export class CanvasController {
     }
 
     _bindEvents() {
-        // Delegación de eventos para mover componentes existentes
         this.canvasElement.addEventListener('mousedown', (e) => {
             const target = e.target.closest('.componente-canvas');
             if (!target) return;
             const id = parseInt(target.dataset.id, 10);
-            const comp = this.project.getComponent(id);
-            if (!comp) return;
-
-            const rect = this.canvasElement.getBoundingClientRect();
-            const offsetX = e.clientX - rect.left - comp.x;
-            const offsetY = e.clientY - rect.top - comp.y;
-
-            this.moveData = { id, offsetX, offsetY };
-            document.addEventListener('mousemove', this._onMove.bind(this));
-            document.addEventListener('mouseup', this._onDrop.bind(this));
+            this.iniciarArrastreDesdeId(e, id);
         });
+
+        this.canvasElement.addEventListener('dblclick', (e) => {
+            const target = e.target.closest('.componente-canvas');
+            if (!target) return;
+            const id = parseInt(target.dataset.id, 10);
+            const comp = this.project.getComponent(id);
+
+            if (comp) {
+                const nuevoTexto = prompt('Editar texto del componente:', comp.text);
+                if (nuevoTexto !== null) {
+                    this.project.updateComponent(id, { text: nuevoTexto });
+                    this.renderer.render(this.project.components);
+                }
+            }
+        });
+    }
+
+    _onDrop() {
+        this.moveData = null;
+        document.removeEventListener('mousemove', this._onMouseMoveRef);
+        document.removeEventListener('mouseup', this._onMouseUpRef);
     }
 
     _onMove(e) {
@@ -46,12 +57,6 @@ export class CanvasController {
 
         this.project.updateComponent(comp.id, { x, y });
         this.renderer.render(this.project.components); // Redibujar todo
-    }
-
-    _onDrop() {
-        this.moveData = null;
-        document.removeEventListener('mousemove', this._onMove);
-        document.removeEventListener('mouseup', this._onDrop);
     }
 
     // Método para agregar un componente desde el Toolbar
