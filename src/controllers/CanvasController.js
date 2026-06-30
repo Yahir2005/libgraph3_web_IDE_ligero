@@ -126,8 +126,12 @@ export class CanvasController {
         const x = Math.max(0, Math.min(clientX - rect.left - 50, this.canvasElement.clientWidth - 100));
         const y = Math.max(0, Math.min(clientY - rect.top - 20, this.canvasElement.clientHeight - 40));
 
-        const width = type === 'texto' ? 80 : type === 'campo' ? 140 : 100;
-        const height = type === 'texto' ? 24 : type === 'campo' ? 38 : 40;
+        let width = 100, height = 40;
+        if (type === 'texto') { width = 80; height = 24; }
+        else if (type === 'campo') { width = 140; height = 38; }
+        else if (type === 'circulo') { width = 60; height = 60; }
+        else if (type === 'linea') { width = 80; height = 80; }
+        else if (type === 'pixel') { width = 10; height = 10; } // 10x10 para que sea "clickeable" con el mouse
 
         const comp = this.project.addComponent(type, x, y);
         this.project.updateComponent(comp.id, { width, height });
