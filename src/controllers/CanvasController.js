@@ -176,7 +176,12 @@ export class CanvasController {
         this.textareaCodigo.value = comp.command || '';
         this.inputVariable.value = comp.varName || '';
 
-        // Condicionales de interfaz según el tipo de componente
+        // Definir qué elementos de la UI se muestran
+        const esGeometrico = ['rectangulo', 'circulo', 'linea', 'pixel'].includes(comp.type);
+
+        document.getElementById('label-texto').style.display = esGeometrico ? 'none' : 'block';
+        this.inputTexto.style.display = esGeometrico ? 'none' : 'block';
+
         document.getElementById('prop-codigo-container').style.display = comp.type === 'boton' ? 'block' : 'none';
         document.getElementById('prop-variable-container').style.display = comp.type === 'campo' ? 'block' : 'none';
         document.getElementById('prop-size-container').style.display = comp.type === 'texto' ? 'block' : 'none';
