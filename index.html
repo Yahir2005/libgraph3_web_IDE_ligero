@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>libgraph3 IDE Ligero</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+
+    <div id="toolbar">
+        <h3>🧰 Herramientas</h3>
+        <div class="herramienta" data-tipo="boton">🔘 Botón</div>
+        <div class="herramienta" data-tipo="texto">📝 Texto</div>
+        <div class="herramienta" data-tipo="rectangulo">▭ Rectángulo</div>
+        <div class="herramienta" data-tipo="campo">🔤 Campo</div>
+        <hr style="border-color:#3c3c3c; width:100%;">
+        <button class="boton-accion principal" id="insertarComp">⬇ Insertar componentes</button>
+        <button class="boton-accion" id="descargar">💾 Descargar .c</button>
+        <button class="boton-accion peligro" id="limpiarCanvas">🗑 Limpiar lienzo</button>
+    </div>
+
+    <div id="main">
+        <div id="canvas-wrapper">
+            <div id="canvas"></div>
+        </div>
+        <div id="codigo-panel">
+            <textarea id="codigoTextarea" spellcheck="false"></textarea>
+            <div class="acciones">
+                <span style="font-size:0.8rem; color:#888;">Edita el código libremente. El marcador <b>//COMPONENTES</b>
+                    será reemplazado.</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-proyecto" style="display:none;">
+        <div class="modal-content">
+            <h2>📁 Nuevo proyecto C</h2>
+            <label>Nombre del proyecto:</label>
+            <input type="text" id="proj-name">
+
+            <label style="display:block; margin:12px 0;">
+                <input type="checkbox" id="use-db"> Usar base de datos
+            </label>
+
+            <div id="db-options" style="display:none;">
+                <label><input type="radio" name="db-type" value="mariadb"> MariaDB</label><br>
+                <label><input type="radio" name="db-type" value="sqlite"> SQLite</label>
+            </div>
+
+            <div style="margin-top:20px;">
+                <button id="btn-generar-proyecto" class="boton-accion principal">📦 Generar y descargar</button>
+                <button id="btn-cancelar-modal" class="boton-accion peligro">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+
+</html>
