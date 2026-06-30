@@ -4,84 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>libgraph3 IDE Ligero</title>
+    <title>libgraph3 IDE Ligero - Editor</title>
     <link rel="stylesheet" href="./styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 
-<body>
-
-    <div id="start-screen">
-        <div class="start-container">
-            <h1>📐 libgraph3 IDE</h1>
-            <p>Entorno de Desarrollo Web para C</p>
-            <button id="btn-start-archivo" class="boton-accion principal">➕ Nuevo archivo .c (Visual)</button>
-            <button id="btn-start-proyecto" class="boton-accion">📁 Crear Proyecto (Clean Architecture)</button>
-        </div>
+<body style="display:flex; justify-content:flex-start; align-items:stretch;">
+    <div id="toolbar">
+        <h3>🧰 Herramientas</h3>
+        <div class="herramienta" data-tipo="boton">🔘 Botón</div>
+        <div class="herramienta" data-tipo="texto">📝 Texto</div>
+        <div class="herramienta" data-tipo="rectangulo">▭ Rectángulo</div>
+        <div class="herramienta" data-tipo="campo">🔤 Campo</div>
+        <div class="herramienta" data-tipo="linea">📏 Línea</div>
+        <div class="herramienta" data-tipo="circulo">⭕ Círculo</div>
+        <div class="herramienta" data-tipo="pixel">◽ Píxel</div>
+        <hr style="border-color:#3c3c3c; width:100%;">
+        <button class="boton-accion principal" id="insertarComp">⬇ Insertar componentes</button>
+        <button class="boton-accion" id="descargar">💾 Descargar .c</button>
+        <button class="boton-accion peligro" id="limpiarCanvas">🗑 Limpiar lienzo</button>
+        <button class="boton-accion" onclick="window.location.href='inicio.html'"
+            style="margin-top:20px; background:#555;">⬅ Volver al inicio</button>
     </div>
 
-    <div id="ide-container" style="display: none;">
-
-        <div id="sidebar">
-
-            <div id="file-explorer" style="display: none;">
-                <h3>📂 Explorador</h3>
-                <div id="file-tree"></div>
-            </div>
-
-            <div id="toolbar" style="display: none;">
-                <button id="btn-volver-archivos" class="boton-accion"
-                    style="width: 100%; margin-bottom: 10px; background: #4e4e4e;">⬅ Volver a archivos</button>
-                <h3>🧰 Herramientas</h3>
-                <div class="herramienta" data-tipo="boton">🔘 Botón</div>
-                <div class="herramienta" data-tipo="texto">📝 Texto</div>
-                <div class="herramienta" data-tipo="rectangulo">▭ Rectángulo</div>
-                <div class="herramienta" data-tipo="campo">🔤 Campo</div>
-                <div class="herramienta" data-tipo="linea">📏 Línea</div>
-                <div class="herramienta" data-tipo="circulo">⭕ Círculo</div>
-                <div class="herramienta" data-tipo="pixel">◽ Píxel</div>
-                <hr style="border-color:#3c3c3c; width:100%;">
-                <button class="boton-accion principal" id="insertarComp">⬇ Insertar en código</button>
-                <button class="boton-accion" id="descargar">💾 Descargar Archivo</button>
-                <button class="boton-accion peligro" id="limpiarCanvas">🗑 Limpiar lienzo</button>
-            </div>
+    <div id="main">
+        <div id="canvas-wrapper">
+            <div id="canvas"></div>
         </div>
-
-        <div id="main">
-            <div id="canvas-wrapper">
-                <div id="canvas"></div>
-            </div>
-
-            <div id="codigo-panel">
-                <div id="current-file-label"
-                    style="background:#3c3c3c; padding:5px 10px; font-size:0.8rem; margin-bottom:5px; border-radius:4px; font-family:monospace;">
-                    Sin archivo seleccionado</div>
-                <textarea id="codigoTextarea" spellcheck="false"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-proyecto" style="display:none;">
-        <div class="modal-content">
-            <h2>📁 Nuevo proyecto C</h2>
-            <label>Nombre del proyecto:</label>
-            <input type="text" id="proj-name">
-            <label style="display:block; margin:12px 0;">
-                <input type="checkbox" id="use-db"> Usar base de datos
-            </label>
-            <div id="db-options" style="display:none;">
-                <label><input type="radio" name="db-type" value="mariadb"> MariaDB</label><br>
-                <label><input type="radio" name="db-type" value="sqlite"> SQLite</label>
-            </div>
-            <div style="margin-top:20px;">
-                <button id="btn-generar-proyecto" class="boton-accion principal">📦 Generar Proyecto</button>
-                <button id="btn-cancelar-modal" class="boton-accion peligro">Cancelar</button>
+        <div id="codigo-panel">
+            <textarea id="codigoTextarea" spellcheck="false"></textarea>
+            <div class="acciones">
+                <span style="font-size:0.8rem; color:#888;">Edita el código libremente. El marcador <b>// === INICIO
+                        COMPONENTES ===</b> será reemplazado.</span>
             </div>
         </div>
     </div>
 
     <div id="menu-propiedades"
-        style="display:none; position:fixed; background:#252526; border:1px solid #3c3c3c; border-radius:6px; padding:12px; z-index:1000; box-shadow:0 6px 16px rgba(0,0,0,0.6); width:250px; color:#d4d4d4; font-family:sans-serif;">
+        style="display:none; position:fixed; background:#252526; border:1px solid #3c3c3c; border-radius:6px; padding:12px; z-index:1000; box-shadow:0 6px 16px rgba(0,0,0,0.6); width:250px; color:#d4d4d4;">
+        <h4 style="margin:0 0 10px 0; border-bottom:1px solid #3c3c3c; padding-bottom:6px; color:#007acc;">🛠
+            Propiedades</h4>
+
+        <label id="label-texto" style="font-size:0.75rem; display:block; margin-bottom:4px;">Texto / Etiqueta:</label>
+        <input type="text" id="prop-texto"
+            style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
+
+        <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Color (libgraph):</label>
+        <select id="prop-color"
+            style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
+            <option value="LIGHTBLUE">LIGHTBLUE</option>
+            <option value="RED">RED</option>
+            <option value="YELLOW">YELLOW</option>
+            <option value="GREEN">GREEN</option>
+            <option value="WHITE">WHITE</option>
+            <option value="BLACK">BLACK</option>
+            <option value="BLUE">BLUE</option>
+        </select>
+
+        <div id="prop-size-container" style="display:none;">
+            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Tamaño Fuente C:</label>
+            <input type="number" id="prop-size" min="1" max="5" value="1"
+                style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
+        </div>
+
+        <div id="prop-variable-container" style="display:none;">
+            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Nombre de Variable C:</label>
+            <input type="text" id="prop-variable" placeholder="txt_buffer"
+                style="width:100%; background:#1e1e1e; border:1px solid #3c3c3c; color:white; padding:5px; border-radius:4px; margin-bottom:10px;">
+        </div>
+
+        <div id="prop-codigo-container" style="display:none;">
+            <label style="font-size:0.75rem; display:block; margin-bottom:4px;">Código de Acción (C):</label>
+            <textarea id="prop-codigo"
+                style="width:100%; height:75px; background:#1e1e1e; border:1px solid #3c3c3c; color:#bae1ff; padding:5px; border-radius:4px; font-family:monospace; font-size:0.75rem; resize:none; margin-bottom:10px;"></textarea>
+        </div>
+
+        <button id="prop-guardar"
+            style="width:100%; background:#007acc; border:none; color:white; padding:7px; border-radius:4px; cursor:pointer;">Aplicar
+            Cambios</button>
     </div>
 
     <script type="module" src="./src/main.js"></script>
