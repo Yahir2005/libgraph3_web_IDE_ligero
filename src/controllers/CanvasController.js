@@ -48,15 +48,26 @@ export class CanvasController {
         if (!this.moveData) return;
         const rect = this.canvasElement.getBoundingClientRect();
         const comp = this.project.getComponent(this.moveData.id);
+
         if (!comp) return;
 
+        // Calculamos las nuevas coordenadas matemáticas
         let x = e.clientX - rect.left - this.moveData.offsetX;
         let y = e.clientY - rect.top - this.moveData.offsetY;
+
+        // Evitamos que se salga de los límites del lienzo
         x = Math.max(0, Math.min(x, this.canvasElement.clientWidth - comp.width));
         y = Math.max(0, Math.min(y, this.canvasElement.clientHeight - comp.height));
 
+        // 1. Actualizamos la memoria del sistema
         this.project.updateComponent(comp.id, { x, y });
-        this.renderer.render(this.project.components); // Redibujar todo
+
+        // 2. Actualizamos SOLO el componente que estamos moviendo (Evita clones y parpadeos)
+        const elementoVisual = this.canvasElement.querySelector(`[data-id="${comp.id}"]`);
+        if (elementoVisual) {
+            elementoVisual.style.left = `${x}px`;
+            elementoVisual.style.top = `${y}px`;
+        }
     }
 
     // Método para agregar un componente desde el Toolbar
