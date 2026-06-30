@@ -55,6 +55,7 @@
         <h1>📐 libgraph3 IDE</h1>
         <p>Crear o cargar un proyecto en C</p>
         <button id="nuevo">➕ Nuevo archivo .c</button>
+        <button id="crearProyecto">📁 Crear proyecto C</button>
         <button id="cargar">📂 Cargar archivo .c</button>
         <input type="file" id="fileInput" accept=".c">
     </div>
@@ -81,6 +82,24 @@
             reader.readAsText(file);
         });
     </script>
+    <div id="modal-proyecto"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:999;">
+        <div style="background:#252526; padding:30px; border-radius:8px; width:400px; color:white;">
+            <h2>Nuevo proyecto C</h2>
+            <label>Nombre del proyecto:</label>
+            <input type="text" id="proj-name" style="width:100%; padding:8px; margin:8px 0;">
+            <label><input type="checkbox" id="use-db"> Usar base de datos</label>
+            <div id="db-options" style="margin:10px 0; display:none;">
+                <label><input type="radio" name="db-type" value="mariadb"> MariaDB</label>
+                <label><input type="radio" name="db-type" value="sqlite"> SQLite</label>
+            </div>
+            <button id="btn-generar-proyecto"
+                style="background:#007acc; border:none; color:white; padding:10px 20px; border-radius:4px;">Generar y
+                descargar</button>
+            <button id="btn-cancelar-modal"
+                style="background:#3c3c3c; border:none; color:white; padding:10px 20px; border-radius:4px;">Cancelar</button>
+        </div>
+    </div>
 </body>
 
 </html>
