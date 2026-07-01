@@ -13,7 +13,6 @@ export class CanvasRenderer {
             div.style.width = `${comp.width}px`; div.style.height = `${comp.height}px`;
 
             const colorHex = hex[comp.color] || '#3498db';
-
             if (!['rectangulo', 'circulo', 'linea', 'pixel'].includes(comp.type)) div.textContent = comp.text;
 
             if (comp.type === 'boton') {
