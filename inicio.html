@@ -44,30 +44,9 @@
 <body>
     <div class="container">
         <h1 style="margin-top:0;">📐 libgraph3 IDE</h1>
-        <p>Crear o cargar un proyecto en C</p>
-        <button id="nuevo">➕ Nuevo archivo .c</button>
-        <button id="cargar">📂 Cargar archivo .c</button>
-        <input type="file" id="fileInput" accept=".c" style="display:none;">
+        <p>Abre el editor para gestionar tus proyectos locales</p>
+        <button onclick="window.location.href='index.html'">🚀 Abrir Editor</button>
     </div>
-    <script>
-        document.getElementById('nuevo').addEventListener('click', () => {
-            const codigoBase = `#include <libgraph3.h>\n\nint main() {\n    int gd = DETECT, gm;\n    initgraph(&gd, &gm, "");\n    setbkcolor(WHITE);\n    cleardevice();\n\n    // === INICIO COMPONENTES ===\n    // No hay componentes\n    // === FIN COMPONENTES ===\n\n    getch();\n    closegraph();\n    return 0;\n}\n`;
-            localStorage.setItem('codigoC', codigoBase);
-            window.location.href = 'index.html';
-        });
-
-        document.getElementById('cargar').addEventListener('click', () => { document.getElementById('fileInput').click(); });
-        document.getElementById('fileInput').addEventListener('change', function (e) {
-            const file = this.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (ev) {
-                localStorage.setItem('codigoC', ev.target.result);
-                window.location.href = 'index.html';
-            };
-            reader.readAsText(file);
-        });
-    </script>
 </body>
 
 </html>
