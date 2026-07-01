@@ -2,7 +2,6 @@ export class CodeGenerator {
     static generate(components) {
         if (components.length === 0) return '    // No hay componentes\n';
         let lines = [];
-        let interactivo = false;
 
         components.forEach(comp => {
             const { x, y, width, height, text, type, command, varName, color, fontSize } = comp;
@@ -11,7 +10,6 @@ export class CodeGenerator {
 
             switch (type) {
                 case 'boton':
-                    interactivo = true;
                     lines.push(`    if (button(${x1}, ${y1}, ${x2}, ${y2}, "${text}")) {`);
                     if (command) {
                         command.split('\n').forEach(cmd => lines.push(`        ${cmd}`));
@@ -21,7 +19,6 @@ export class CodeGenerator {
                     lines.push(`    }`);
                     break;
                 case 'campo':
-                    interactivo = true;
                     lines.push(`    setfillstyle(SOLID_FILL, ${color === 'WHITE' ? 'WHITE' : color});`);
                     lines.push(`    bar(${x1}, ${y1}, ${x2}, ${y2});`);
                     lines.push(`    setcolor(BLACK);\n    rectangle(${x1}, ${y1}, ${x2}, ${y2});`);
@@ -48,7 +45,6 @@ export class CodeGenerator {
             lines.push('');
         });
 
-        if (interactivo) lines.push('    // NOTA: Para interactividad, añade un bucle while (!kbhit()) manual.');
         return lines.join('\n');
     }
 }
